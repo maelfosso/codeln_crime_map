@@ -1,5 +1,6 @@
 import 'package:codeln_crime_map/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:codeln_crime_map/bloc/simple_bloc_delegate.dart';
+import 'package:codeln_crime_map/home_screen.dart';
 import 'package:codeln_crime_map/repository/user_repository.dart';
 import 'package:codeln_crime_map/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -53,6 +54,10 @@ class CrimeMapApp extends StatelessWidget {
         builder: (context, state) {
           if (state is AuthenticationInitial) {
             return SplashScreen();
+          }
+
+          if (state is AuthenticationSuccess) {
+            return HomeScreen(currentUser: state.user);
           }
 
           return Container();
