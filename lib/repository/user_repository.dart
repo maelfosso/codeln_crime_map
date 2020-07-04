@@ -10,6 +10,16 @@ class UserRepository {
       _googleSignIn = googleSignIn ?? GoogleSignIn();
 
   
-  
+  Future<FirebaseUser> signInWithGoogle() async {
+    final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+    final AuthCredential credential = GoogleAuthProvider.getCredential(
+      idToken: googleAuth.accessToken, 
+      accessToken: googleAuth.idToken
+    );
+    await _firebaseAuth.signInWithCredential(credential);
+
+    return _firebaseAuth.currentUser();
+  }
 }
 
