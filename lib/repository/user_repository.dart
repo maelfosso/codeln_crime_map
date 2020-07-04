@@ -28,6 +28,12 @@ class UserRepository {
       _googleSignIn.signOut()
     ]);
   }
+
+  Future<bool> isSignedIn() async {
+    final currentUser = await _firebaseAuth.currentUser();
+    return currentUser != null;
+  }
+
   
 }
 
