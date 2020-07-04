@@ -1,5 +1,5 @@
-name: crime_map
-description: A new Flutter project.
+name: codeln_crime_map
+description: Create an application that will allow users to add areas reported with crimes to a crime map.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
