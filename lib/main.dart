@@ -1,10 +1,22 @@
+import 'package:codeln_crime_map/bloc/authentication_bloc/authentication_bloc.dart';
+import 'package:codeln_crime_map/repository/user_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
-  runApp(MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  final UserRepository userRepository = UserRepository();
+  runApp(
+    BlocProvider(
+      create: (context) => AuthenticationBloc(userRepository: userRepository)
+        .add(AuthenticationStarted()),
+      child: CrimeMapApp(),
+    )
+  );
 }
 
-class MyApp extends StatelessWidget {
+class CrimeMapApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
