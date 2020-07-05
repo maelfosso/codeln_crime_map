@@ -15,12 +15,20 @@ class UserRepository {
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
     final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
     final AuthCredential credential = GoogleAuthProvider.getCredential(
-      idToken: googleAuth.accessToken, 
-      accessToken: googleAuth.idToken
+      idToken: googleAuth.idToken,
+      accessToken: googleAuth.accessToken
     );
-    await _firebaseAuth.signInWithCredential(credential);
+    
+    
+    final AuthResult authResult = await _firebaseAuth.signInWithCredential(credential);
+    final FirebaseUser user = authResult.user;
+    assert(!user.isAnonymous);
+    assert(await user.getIdToken() != null);
 
-    return _firebaseAuth.currentUser();
+    final FirebaseUser currentUser = await _firebaseAuth.currentUser();
+    assert(user.uid == currentUser.uid);
+
+    return currentUser;
   }
 
   Future<void> signOut() async {

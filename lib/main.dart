@@ -1,6 +1,8 @@
 import 'package:codeln_crime_map/bloc/authentication_bloc/authentication_bloc.dart';
+import 'package:codeln_crime_map/bloc/login_bloc/bloc.dart';
 import 'package:codeln_crime_map/bloc/simple_bloc_delegate.dart';
 import 'package:codeln_crime_map/home_screen.dart';
+import 'package:codeln_crime_map/login_screen.dart';
 import 'package:codeln_crime_map/repository/user_repository.dart';
 import 'package:codeln_crime_map/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -12,13 +14,32 @@ void main() {
   
   final UserRepository userRepository = UserRepository();
 
+  // runApp(
+  //   BlocProvider(
+  //     create: (context) => AuthenticationBloc(
+  //       userRepository: userRepository
+  //     )..add(AuthenticationStarted()),
+  //     child: CrimeMapApp(userRepository: userRepository),
+  //   )
+  // );
   runApp(
-    BlocProvider(
-      create: (context) => AuthenticationBloc(
-        userRepository: userRepository
-      )..add(AuthenticationStarted()),
-      child: CrimeMapApp(userRepository: userRepository),
-    )
+    MultiBlocProvider(
+    providers: [
+      BlocProvider(
+        create: (context) => AuthenticationBloc(
+          userRepository: userRepository
+        )..add(AuthenticationStarted()),
+      ),
+      BlocProvider(
+        create: (context) => LoginBloc(
+          userRepository: userRepository
+        )
+      )
+    ],
+    child: CrimeMapApp(userRepository: userRepository),
+  )
+
+
   );
 }
 
@@ -58,6 +79,10 @@ class CrimeMapApp extends StatelessWidget {
 
           if (state is AuthenticationSuccess) {
             return HomeScreen(currentUser: state.user);
+          }
+
+          if (state is AuthenticationFailure) {
+            return LoginScreen(userRepository: _userRepository);
           }
 
           return Container();
