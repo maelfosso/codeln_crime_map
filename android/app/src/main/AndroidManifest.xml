@@ -9,6 +9,11 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="crime_map"
         android:icon="@mipmap/ic_launcher">
+
+        <meta-data
+          android:name="com.google.android.geo.API_KEY"
+          android:value="AIzaSyAk0tS2LhxhnDF8gjVzZKczuet_NF7k3RM"/>
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
