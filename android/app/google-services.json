@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "792662950265",
+    "firebase_url": "https://codeln-crime-map.firebaseio.com",
+    "project_id": "codeln-crime-map",
+    "storage_bucket": "codeln-crime-map.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:792662950265:android:e356e8bcf7ddb1b2f5afa8",
+        "android_client_info": {
+          "package_name": "com.codeln.interviews.crime_map"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "792662950265-sj8b7a5bv9c0e5gjkrqbf7f7gpbln4et.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.codeln.interviews.crime_map",
+            "certificate_hash": "2b14a259dcb8baefb478405305476b415201f1dc"
+          }
+        },
+        {
+          "client_id": "792662950265-m1iucuqocc6feeclsjj1gq9kpec2oahi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCu3_qA6oeC4yhtqvYyl5pEsBI23fgX4t0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "792662950265-m1iucuqocc6feeclsjj1gq9kpec2oahi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

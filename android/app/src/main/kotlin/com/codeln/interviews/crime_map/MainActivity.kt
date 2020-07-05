@@ -1,4 +1,4 @@
-package com.example.crime_map
+package com.codeln.interviews.crime_map
 
 import io.flutter.embedding.android.FlutterActivity
 
