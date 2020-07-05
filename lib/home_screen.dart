@@ -1,4 +1,5 @@
 import 'package:codeln_crime_map/bloc/authentication_bloc/authentication_bloc.dart';
+import 'package:codeln_crime_map/crime_map_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -25,12 +26,13 @@ class HomeScreen extends StatelessWidget {
           )
         ]
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Center(child: Text('Welcome ${currentUser.email}'))
-        ],
-      )
+      body: CrimeMap()
+      // Column(
+      //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      //   children: <Widget>[
+      //     Center(child: Text('Welcome ${currentUser.email}'))
+      //   ],
+      // )
     );
   }
 }
