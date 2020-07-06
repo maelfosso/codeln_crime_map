@@ -25,3 +25,15 @@ class GettingPlacesSuccess extends CrimeMapState {
 class GettingPlacesFailure extends CrimeMapState {}
 
 class AddingNewCrimePlace extends CrimeMapState {}
+
+class NewCrimePlaceAdded extends CrimeMapState {
+  final String place;
+
+  const NewCrimePlaceAdded(this.place);
+
+  @override
+  List<Object> get props => [place];
+
+  @override
+  String toString() => 'NewCrimePlaceAdded { Place : $place }';
+}

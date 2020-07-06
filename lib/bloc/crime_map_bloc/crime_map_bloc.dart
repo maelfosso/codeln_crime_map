@@ -23,6 +23,8 @@ class CrimeMapBloc extends Bloc<CrimeMapEvent, CrimeMapState> {
       yield* _mapGettingCrimePlacesToState();
     } else if (event is CrimeMapAddButtonPressed) {
       yield* _mapCrimeMapAddButtonPressedToState();
+    } else if (event is SaveCrimePlace) {
+      yield* _mapSaveCrimePlaceToState(event.place);
     }
   }
 
@@ -49,6 +51,16 @@ class CrimeMapBloc extends Bloc<CrimeMapEvent, CrimeMapState> {
     //   yield CrimeMapState.failure();
     // }
     yield AddingNewCrimePlace();
+  }
+
+  Stream<CrimeMapState> _mapSaveCrimePlaceToState(String place) async* {
+    // try {
+    //   await _userRepository.signInWithGoogle();
+    //   yield CrimeMapState.success();
+    // } catch(_) {
+    //   yield CrimeMapState.failure();
+    // }
+    yield NewCrimePlaceAdded(place);
   }
   
 }

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:codeln_crime_map/add_crime_place_dialog.dart';
 import 'package:codeln_crime_map/bloc/crime_map_bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -14,8 +15,30 @@ class CrimeMap extends StatefulWidget {
 class _CrimeMapState extends State<CrimeMap> {
 
   GoogleMapController mapController;
+  bool _addCrimePlaceVisible = true;
 
   final LatLng _center = const LatLng(45.521563, -122.677433);
+
+
+  void _openAddCrimePlaceDialog() async {
+    String place = await Navigator.of(context).push(
+      new PageRouteBuilder<String>(
+        opaque: false,
+        pageBuilder: (BuildContext context, _, __) {
+          return AddCrimePlaceDialog();
+        },
+        fullscreenDialog: true
+      )
+    );
+
+    BlocProvider.of<CrimeMapBloc>(context).add(SaveCrimePlace(place: place));
+
+    // if (save != null) {
+
+    // } else {
+
+    // }
+  }
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -74,30 +97,49 @@ class _CrimeMapState extends State<CrimeMap> {
           // 1. Remove all the markers from the map
           // 2. Show the transparent screen for adding crime places
           print('\n[BlocListener - CrimeMapBloc] State - AddingNewCrimePlace');
+          
+          this._addCrimePlaceVisible = false;
         }
       },
-      child: new Scaffold(
-        body: GoogleMap(
-          onMapCreated: _onMapCreated,
-          compassEnabled: true,
-          myLocationEnabled: true,
-          myLocationButtonEnabled: true,
-          zoomControlsEnabled: false,
-          
-          initialCameraPosition: CameraPosition(
-            target: _center,
-            zoom: 11.0,
-          ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            BlocProvider.of<CrimeMapBloc>(context).add(
-              CrimeMapAddButtonPressed()
-            );
-          },
-          child: Icon(Icons.add),
-          backgroundColor: Colors.red
-        ),
+      child: BlocBuilder<CrimeMapBloc, CrimeMapState>(
+        builder: (context, state) {
+          bool fabAddCrimePlaceVisible = true;
+
+          if (state is AddingNewCrimePlace) {
+            fabAddCrimePlaceVisible = false;
+          }
+          if (state is NewCrimePlaceAdded) {
+            fabAddCrimePlaceVisible = true;
+          }
+
+          return new Scaffold(
+            body:  GoogleMap(
+              onMapCreated: _onMapCreated,
+              compassEnabled: true,
+              myLocationEnabled: true,
+              myLocationButtonEnabled: true,
+              zoomControlsEnabled: false,
+              
+              initialCameraPosition: CameraPosition(
+                target: _center,
+                zoom: 11.0,
+              ),
+            ),
+            floatingActionButton: Visibility(
+              visible: fabAddCrimePlaceVisible,
+              child: FloatingActionButton(
+                onPressed: () {
+                  BlocProvider.of<CrimeMapBloc>(context).add(
+                    CrimeMapAddButtonPressed()
+                  );
+                  this._openAddCrimePlaceDialog();
+                },
+                child: Icon(Icons.add),
+                backgroundColor: Colors.red,
+              ),
+            )
+          );
+        }     
       )
     );
   }

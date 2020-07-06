@@ -45,6 +45,14 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Home'),
         actions: <Widget>[
+          // IconButton(
+          //   icon: Icon(Icons.add),
+          //   onPressed: () {
+          //     BlocProvider.of<CrimeMapBloc>(context).add(
+          //       CrimeMapAddButtonPressed()
+          //     );
+          //   },
+          // ),
           IconButton(
             icon: Icon(Icons.exit_to_app),
             onPressed: () {
