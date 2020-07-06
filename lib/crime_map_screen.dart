@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:codeln_crime_map/add_crime_place_dialog.dart';
 import 'package:codeln_crime_map/bloc/crime_map_bloc/bloc.dart';
+import 'package:codeln_crime_map/bloc/google_place/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,37 +16,41 @@ class CrimeMap extends StatefulWidget {
 class _CrimeMapState extends State<CrimeMap> {
 
   GoogleMapController mapController;
-  bool _addCrimePlaceVisible = true;
 
   final LatLng _center = const LatLng(45.521563, -122.677433);
-
+  CameraPosition _cameraPosition;
 
   void _openAddCrimePlaceDialog() async {
     String place = await Navigator.of(context).push(
       new PageRouteBuilder<String>(
         opaque: false,
         pageBuilder: (BuildContext context, _, __) {
-          return AddCrimePlaceDialog();
+          return BlocProvider(
+            create: (context) => GooglePlaceBloc()
+              ..add(LoadGooglePlacesNearby(center: _cameraPosition.target)),
+            child: AddCrimePlaceDialog(latLng: _cameraPosition.target)
+          ); 
         },
         fullscreenDialog: true
       )
     );
 
     BlocProvider.of<CrimeMapBloc>(context).add(SaveCrimePlace(place: place));
-
-    // if (save != null) {
-
-    // } else {
-
-    // }
   }
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
   }
 
+  void _onCameraMove(CameraPosition position) {
+    print('[onCameraMove] $position');
+    _cameraPosition = position;
+  }
+
   @override
   Widget build(BuildContext context) {
+    _cameraPosition = CameraPosition(target: _center);
+
     return BlocListener<CrimeMapBloc, CrimeMapState>(
       listener: (context, state) {
         if (state is CrimePlacesLoadSuccess) {
@@ -97,8 +102,6 @@ class _CrimeMapState extends State<CrimeMap> {
           // 1. Remove all the markers from the map
           // 2. Show the transparent screen for adding crime places
           print('\n[BlocListener - CrimeMapBloc] State - AddingNewCrimePlace');
-          
-          this._addCrimePlaceVisible = false;
         }
       },
       child: BlocBuilder<CrimeMapBloc, CrimeMapState>(
@@ -119,6 +122,7 @@ class _CrimeMapState extends State<CrimeMap> {
               myLocationEnabled: true,
               myLocationButtonEnabled: true,
               zoomControlsEnabled: false,
+              onCameraMove: _onCameraMove,
               
               initialCameraPosition: CameraPosition(
                 target: _center,
