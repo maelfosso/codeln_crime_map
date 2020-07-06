@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class HomeScreen extends StatelessWidget {
   final FirebaseUser currentUser;
@@ -11,8 +12,32 @@ class HomeScreen extends StatelessWidget {
   HomeScreen({Key key, @required this.currentUser})
     : super(key: key);
 
+  void _checkPermission() async {
+    var status = await Permission.location.status;
+    if (!status.isGranted) {
+      // We didn't ask for permission yet.
+      print('[Permission.location.status] Is Not Granted');
+      if (await Permission.location.request().isGranted) {
+        print('[Permission.location.isGranted] OK');
+      }
+    }
+    // print(status);
+
+    // You can can also directly ask the permission about its status.
+    // if (await Permission.location.isRestricted) {
+      // The OS restricts access, for example because of parental controls.
+      // print('[Permission.location.isRestricted] Is Restricted');
+      // if (await Permission.location.request().isGranted) {
+        // print('[Permission.location.isGranted] OK');
+      // }
+    // }
+
+  }
+
   @override
   Widget build(BuildContext context) {
+    _checkPermission();
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Home'),

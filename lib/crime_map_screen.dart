@@ -10,7 +10,7 @@ class CrimeMap extends StatefulWidget {
 }
 
 class _CrimeMapState extends State<CrimeMap> {
-  
+
   GoogleMapController mapController;
 
   final LatLng _center = const LatLng(45.521563, -122.677433);
@@ -21,11 +21,25 @@ class _CrimeMapState extends State<CrimeMap> {
 
   @override
   Widget build(BuildContext context) {
-    return GoogleMap(
-      onMapCreated: _onMapCreated,
-      initialCameraPosition: CameraPosition(
-        target: _center,
-        zoom: 11.0,
+    return new Scaffold(
+      body: GoogleMap(
+        onMapCreated: _onMapCreated,
+        compassEnabled: true,
+        myLocationEnabled: true,
+        myLocationButtonEnabled: true,
+        zoomControlsEnabled: false,
+        
+        initialCameraPosition: CameraPosition(
+          target: _center,
+          zoom: 11.0,
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Add your onPressed code here!
+        },
+        child: Icon(Icons.add),
+        backgroundColor: Colors.red
       ),
     );
   }
