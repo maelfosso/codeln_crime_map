@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:codeln_crime_map/bloc/crime_map_bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class CrimeMap extends StatefulWidget {
@@ -21,26 +23,47 @@ class _CrimeMapState extends State<CrimeMap> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      body: GoogleMap(
-        onMapCreated: _onMapCreated,
-        compassEnabled: true,
-        myLocationEnabled: true,
-        myLocationButtonEnabled: true,
-        zoomControlsEnabled: false,
-        
-        initialCameraPosition: CameraPosition(
-          target: _center,
-          zoom: 11.0,
+    return BlocListener<CrimeMapBloc, CrimeMapState>(
+      listener: (context, state) {
+        if (state is GettingPlacesSuccess) {
+          List<String> places = state.places;
+
+          // Display the places as markers
+          print('\n[BlocListener - CrimeMapBloc] State - GettingPlacesSuccess');
+        }
+        if (state is GettingPlacesFailure) {
+          // Show the snackbar
+          print('\n[BlocListener - CrimeMapBloc] State - GettingPlacesFailure');
+        }
+        if (state is AddingNewCrimePlace) {
+          // 1. Remove all the markers from the map
+          // 2. Show the transparent screen for adding crime places
+          print('\n[BlocListener - CrimeMapBloc] State - AddingNewCrimePlace');
+        }
+      },
+      child: new Scaffold(
+        body: GoogleMap(
+          onMapCreated: _onMapCreated,
+          compassEnabled: true,
+          myLocationEnabled: true,
+          myLocationButtonEnabled: true,
+          zoomControlsEnabled: false,
+          
+          initialCameraPosition: CameraPosition(
+            target: _center,
+            zoom: 11.0,
+          ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Add your onPressed code here!
-        },
-        child: Icon(Icons.add),
-        backgroundColor: Colors.red
-      ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            BlocProvider.of<CrimeMapBloc>(context).add(
+              CrimeMapAddButtonPressed()
+            );
+          },
+          child: Icon(Icons.add),
+          backgroundColor: Colors.red
+        ),
+      )
     );
   }
 }

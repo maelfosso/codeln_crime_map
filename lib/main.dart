@@ -24,22 +24,20 @@ void main() {
   // );
   runApp(
     MultiBlocProvider(
-    providers: [
-      BlocProvider(
-        create: (context) => AuthenticationBloc(
-          userRepository: userRepository
-        )..add(AuthenticationStarted()),
-      ),
-      BlocProvider(
-        create: (context) => LoginBloc(
-          userRepository: userRepository
+      providers: [
+        BlocProvider(
+          create: (context) => AuthenticationBloc(
+            userRepository: userRepository
+          )..add(AuthenticationStarted()),
+        ),
+        BlocProvider(
+          create: (context) => LoginBloc(
+            userRepository: userRepository
+          )
         )
-      )
-    ],
-    child: CrimeMapApp(userRepository: userRepository),
-  )
-
-
+      ],
+      child: CrimeMapApp(userRepository: userRepository),
+    )
   );
 }
 
