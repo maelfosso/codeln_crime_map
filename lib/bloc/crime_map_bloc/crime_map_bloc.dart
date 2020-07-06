@@ -19,7 +19,7 @@ class CrimeMapBloc extends Bloc<CrimeMapEvent, CrimeMapState> {
 
   @override
   Stream<CrimeMapState> mapEventToState(CrimeMapEvent event) async* {
-    if (event is GettingCrimePlaces) {
+    if (event is LoadCrimePlaces) {
       yield* _mapGettingCrimePlacesToState();
     } else if (event is CrimeMapAddButtonPressed) {
       yield* _mapCrimeMapAddButtonPressedToState();
@@ -37,9 +37,9 @@ class CrimeMapBloc extends Bloc<CrimeMapEvent, CrimeMapState> {
     // }
     var rand = new Random();
     if (rand.nextInt(100) % 2 == 0) {
-      yield GettingPlacesSuccess([]);
+      yield CrimePlacesLoadSuccess([]);
     } else {
-      yield GettingPlacesFailure();
+      yield CrimePlacesLoadFailure();
     }
   }
 
@@ -50,7 +50,7 @@ class CrimeMapBloc extends Bloc<CrimeMapEvent, CrimeMapState> {
     // } catch(_) {
     //   yield CrimeMapState.failure();
     // }
-    yield AddingNewCrimePlace();
+    yield CrimePlaceAddInProgress();
   }
 
   Stream<CrimeMapState> _mapSaveCrimePlaceToState(String place) async* {
@@ -60,7 +60,7 @@ class CrimeMapBloc extends Bloc<CrimeMapEvent, CrimeMapState> {
     // } catch(_) {
     //   yield CrimeMapState.failure();
     // }
-    yield NewCrimePlaceAdded(place);
+    yield CrimePlaceAdded(place);
   }
   
 }

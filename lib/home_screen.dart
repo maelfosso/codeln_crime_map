@@ -24,17 +24,6 @@ class HomeScreen extends StatelessWidget {
         print('[Permission.location.isGranted] OK');
       }
     }
-    // print(status);
-
-    // You can can also directly ask the permission about its status.
-    // if (await Permission.location.isRestricted) {
-      // The OS restricts access, for example because of parental controls.
-      // print('[Permission.location.isRestricted] Is Restricted');
-      // if (await Permission.location.request().isGranted) {
-        // print('[Permission.location.isGranted] OK');
-      // }
-    // }
-
   }
 
   @override
@@ -45,14 +34,6 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Home'),
         actions: <Widget>[
-          // IconButton(
-          //   icon: Icon(Icons.add),
-          //   onPressed: () {
-          //     BlocProvider.of<CrimeMapBloc>(context).add(
-          //       CrimeMapAddButtonPressed()
-          //     );
-          //   },
-          // ),
           IconButton(
             icon: Icon(Icons.exit_to_app),
             onPressed: () {
@@ -65,15 +46,9 @@ class HomeScreen extends StatelessWidget {
       body: BlocProvider(
         create: (context) => CrimeMapBloc(
           userRepository: userRepository
-        )..add(GettingCrimePlaces()),
+        )..add(LoadCrimePlaces()), // CrimePlacesLoaded()
         child: CrimeMap(),
       )
-      // Column(
-      //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      //   children: <Widget>[
-      //     Center(child: Text('Welcome ${currentUser.email}'))
-      //   ],
-      // )
     );
   }
 }

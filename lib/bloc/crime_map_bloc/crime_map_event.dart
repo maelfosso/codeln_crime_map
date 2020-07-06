@@ -3,14 +3,13 @@ import 'package:meta/meta.dart';
 
 abstract class CrimeMapEvent extends Equatable {
   const CrimeMapEvent();
-  
+
   @override
   List<Object> get props => [];  
 }
 
-class GettingCrimePlaces extends CrimeMapEvent {}
+class LoadCrimePlaces extends CrimeMapEvent {}
 
-class CrimeMapAddButtonPressed extends CrimeMapEvent {}
 
 class SaveCrimePlace extends CrimeMapEvent {
   final String place;
@@ -27,3 +26,5 @@ class SaveCrimePlace extends CrimeMapEvent {
       'SaveCrimePlace { place: $place }';
 
 }
+
+class CrimeMapAddButtonPressed extends CrimeMapEvent {}

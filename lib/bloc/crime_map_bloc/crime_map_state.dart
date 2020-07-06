@@ -10,30 +10,46 @@ abstract class CrimeMapState extends Equatable {
 
 class CrimeMapInitial extends CrimeMapState {}
 
-class GettingPlacesSuccess extends CrimeMapState {
-  final List<String> places;
+class CrimePlacesLoadInProgress extends CrimeMapState {}
 
-  const GettingPlacesSuccess(this.places);
+class CrimePlacesLoadSuccess extends CrimeMapState {
+  final List<CrimePlace> places;
+
+  const CrimePlacesLoadSuccess([this.places = const []]);
 
   @override
   List<Object> get props => [places];
 
   @override
-  String toString() => 'GettingPlacesSuccess { Places : $places }';
+  String toString() => 'CrimePlacesLoadSuccess { todos: $places }';
 }
 
-class GettingPlacesFailure extends CrimeMapState {}
+class CrimePlacesLoadFailure extends CrimeMapState {}
 
-class AddingNewCrimePlace extends CrimeMapState {}
+class CrimePlaceAddInProgress extends CrimeMapState {}
 
-class NewCrimePlaceAdded extends CrimeMapState {
-  final String place;
+class CrimePlaceAdded extends CrimeMapState {
+  final CrimePlace place;
 
-  const NewCrimePlaceAdded(this.place);
+  const CrimePlaceAdded(this.place);
 
   @override
   List<Object> get props => [place];
 
   @override
-  String toString() => 'NewCrimePlaceAdded { Place : $place }';
+  String toString() => 'CrimePlaceAdded { Place : $place }';
 }
+
+// class GettingPlacesSuccess extends CrimeMapState {
+//   final List<String> places;
+
+//   const GettingPlacesSuccess(this.places);
+
+//   @override
+//   List<Object> get props => [places];
+
+//   @override
+//   String toString() => 'GettingPlacesSuccess { Places : $places }';
+// }
+
+// class GettingPlacesFailure extends CrimeMapState {}

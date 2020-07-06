@@ -48,7 +48,7 @@ class _CrimeMapState extends State<CrimeMap> {
   Widget build(BuildContext context) {
     return BlocListener<CrimeMapBloc, CrimeMapState>(
       listener: (context, state) {
-        if (state is GettingPlacesSuccess) {
+        if (state is CrimePlacesLoadSuccess) {
           List<String> places = state.places;
 
           // Display the places as markers
@@ -67,7 +67,7 @@ class _CrimeMapState extends State<CrimeMap> {
               )
             );
         }
-        if (state is GettingPlacesFailure) {
+        if (state is CrimePlacesLoadFailure) {
           // Show the snackbar
           print('\n[BlocListener - CrimeMapBloc] State - GettingPlacesFailure');
           Scaffold.of(context)
@@ -85,7 +85,7 @@ class _CrimeMapState extends State<CrimeMap> {
                   label: 'Refresh',
                   onPressed: () {
                     // Some code to undo the change.
-                    BlocProvider.of<CrimeMapBloc>(context).add(GettingCrimePlaces());
+                    BlocProvider.of<CrimeMapBloc>(context).add(LoadCrimePlaces());
                   },
                 ),
                 backgroundColor: Colors.red,
@@ -93,7 +93,7 @@ class _CrimeMapState extends State<CrimeMap> {
               )
             );
         }
-        if (state is AddingNewCrimePlace) {
+        if (state is CrimePlaceAddInProgress) {
           // 1. Remove all the markers from the map
           // 2. Show the transparent screen for adding crime places
           print('\n[BlocListener - CrimeMapBloc] State - AddingNewCrimePlace');
@@ -105,10 +105,10 @@ class _CrimeMapState extends State<CrimeMap> {
         builder: (context, state) {
           bool fabAddCrimePlaceVisible = true;
 
-          if (state is AddingNewCrimePlace) {
+          if (state is CrimePlaceAddInProgress) {
             fabAddCrimePlaceVisible = false;
           }
-          if (state is NewCrimePlaceAdded) {
+          if (state is CrimePlaceAdded) {
             fabAddCrimePlaceVisible = true;
           }
 
