@@ -22,4 +22,14 @@ class LoadGooglePlacesNearbySuccess extends GooglePlaceState {
   String toString() => 'LoadGooglePlacesNearbySuccess { places: $places }';
 }
 
-class LoadGooglePlacesNearbyFailure extends GooglePlaceState {}
+class LoadGooglePlacesNearbyFailure extends GooglePlaceState {
+  final String error;
+
+  const LoadGooglePlacesNearbyFailure([this.error = ""]);
+
+  @override
+  List<Object> get props => [error];
+
+  @override
+  String toString() => 'LoadGooglePlacesNearbyFailure { error: $error }';
+}

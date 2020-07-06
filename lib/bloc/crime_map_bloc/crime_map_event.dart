@@ -13,7 +13,7 @@ abstract class CrimeMapEvent extends Equatable {
 class LoadCrimePlaces extends CrimeMapEvent {}
 
 class SaveCrimePlace extends CrimeMapEvent {
-  final String place;
+  final LatLng place;
 
   const SaveCrimePlace({
     @required this.place

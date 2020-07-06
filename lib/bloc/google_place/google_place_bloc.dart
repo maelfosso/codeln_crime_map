@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
 
-GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: "");
+GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: "AIzaSyAk0tS2LhxhnDF8gjVzZKczuet_NF7k3RM");
 
 class GooglePlaceBloc extends Bloc<GooglePlaceEvent, GooglePlaceState> {
 
@@ -27,6 +27,7 @@ class GooglePlaceBloc extends Bloc<GooglePlaceEvent, GooglePlaceState> {
     Location location = Location(latLng.latitude, latLng.longitude);
     final result = await _places.searchNearbyWithRadius(location, 2500);
     List<GooglePlace> crimePlaces = [];
+    print('\nPLACES.... ${_places.apiKey}');
 
     if (result.status == "OK") {
       for (int i = 0; i < result.results.length; i++) {
@@ -36,7 +37,10 @@ class GooglePlaceBloc extends Bloc<GooglePlaceEvent, GooglePlaceState> {
       
       yield LoadGooglePlacesNearbySuccess(crimePlaces);
     } else {
-      yield LoadGooglePlacesNearbyFailure();
+      print(result.status);
+      print(result.errorMessage);
+      
+      yield LoadGooglePlacesNearbyFailure(result.errorMessage);
     }
   }
   

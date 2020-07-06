@@ -21,8 +21,8 @@ class _CrimeMapState extends State<CrimeMap> {
   CameraPosition _cameraPosition;
 
   void _openAddCrimePlaceDialog() async {
-    String place = await Navigator.of(context).push(
-      new PageRouteBuilder<String>(
+    LatLng place = await Navigator.of(context).push(
+      new PageRouteBuilder<LatLng>(
         opaque: false,
         pageBuilder: (BuildContext context, _, __) {
           return BlocProvider(
@@ -35,6 +35,7 @@ class _CrimeMapState extends State<CrimeMap> {
       )
     );
 
+    print('[openAddCrimePlaceDialog] $place');
     BlocProvider.of<CrimeMapBloc>(context).add(SaveCrimePlace(place: place));
   }
 
