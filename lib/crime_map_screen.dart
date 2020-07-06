@@ -30,10 +30,45 @@ class _CrimeMapState extends State<CrimeMap> {
 
           // Display the places as markers
           print('\n[BlocListener - CrimeMapBloc] State - GettingPlacesSuccess');
+          Scaffold.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text('Crime places successfully displayed'),
+                    Icon(Icons.thumb_up)
+                  ],
+                )
+              )
+            );
         }
         if (state is GettingPlacesFailure) {
           // Show the snackbar
           print('\n[BlocListener - CrimeMapBloc] State - GettingPlacesFailure');
+          Scaffold.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text('Getting crime places failed'),
+                    Icon(Icons.error)
+                  ],
+                ),
+                action: SnackBarAction(
+                  label: 'Refresh',
+                  onPressed: () {
+                    // Some code to undo the change.
+                    BlocProvider.of<CrimeMapBloc>(context).add(GettingCrimePlaces());
+                  },
+                ),
+                backgroundColor: Colors.red,
+                duration: Duration(seconds: 365*1000),
+              )
+            );
         }
         if (state is AddingNewCrimePlace) {
           // 1. Remove all the markers from the map
