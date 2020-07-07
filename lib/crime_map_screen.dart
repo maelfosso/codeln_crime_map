@@ -1,14 +1,26 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:codeln_crime_map/add_crime_place_dialog.dart';
 import 'package:codeln_crime_map/bloc/crime_map_bloc/bloc.dart';
 import 'package:codeln_crime_map/bloc/google_place/bloc.dart';
+import 'package:codeln_crime_map/models/models.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import 'dart:ui' as ui;
+
+Future<Uint8List> getBytesFromAsset(String path, int width) async {
+  ByteData data = await rootBundle.load(path);
+  ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(), targetWidth: width);
+  ui.FrameInfo fi = await codec.getNextFrame();
+  return (await fi.image.toByteData(format: ui.ImageByteFormat.png)).buffer.asUint8List();
+}
 
 class CrimeMap extends StatefulWidget {
   @override
@@ -21,6 +33,7 @@ class _CrimeMapState extends State<CrimeMap> {
 
   final LatLng _center = const LatLng(45.521563, -122.677433);
   CameraPosition _cameraPosition;
+  BitmapDescriptor pinLocationIcon;
 
   void _openAddCrimePlaceDialogFromMap(LatLng latLng) async {
     LatLng place = await Navigator.of(context).push(
@@ -63,40 +76,35 @@ class _CrimeMapState extends State<CrimeMap> {
     BlocProvider.of<CrimeMapBloc>(context).add(SaveCrimePlace(place: place));
   }
 
-
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
   }
 
   void _onCameraMove(CameraPosition position) {
-    print('[onCameraMove] $position');
     _cameraPosition = position;
+  }
+
+  void _setCustomMapPin() async {
+    Uint8List icon = await getBytesFromAsset('assets/location-pin.png', 135);
+    pinLocationIcon = BitmapDescriptor.fromBytes(icon);
   }
 
   @override
   Widget build(BuildContext context) {
+    _setCustomMapPin();
     _cameraPosition = CameraPosition(target: _center);
+
 
     return BlocListener<CrimeMapBloc, CrimeMapState>(
       listener: (context, state) {
         if (state is CrimePlacesLoadSuccess) {
-          List<String> places = state.places;
+          List<CrimePlace> places = state.places;
 
           // Display the places as markers
           print('\n[BlocListener - CrimeMapBloc] State - GettingPlacesSuccess');
-          Scaffold.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                content: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text('Crime places successfully displayed'),
-                    Icon(Icons.thumb_up)
-                  ],
-                )
-              )
-            );
+          places.map((e) => {
+            // mapController.a
+          });
         }
         if (state is CrimePlacesLoadFailure) {
           // Show the snackbar
@@ -133,12 +141,26 @@ class _CrimeMapState extends State<CrimeMap> {
       child: BlocBuilder<CrimeMapBloc, CrimeMapState>(
         builder: (context, state) {
           bool fabAddCrimePlaceVisible = true;
+          List<Marker> markers = [];
 
           if (state is CrimePlaceAddInProgress) {
             fabAddCrimePlaceVisible = false;
           }
-          if (state is CrimePlaceAdded) {
+          if (state is CrimePlaceAdded || state is CrimePlaceAddFinish) {
             fabAddCrimePlaceVisible = true;
+          }
+
+          if (state is CrimePlacesLoadSuccess) {
+            print('[CRIME MAP SCREEN] CrimePlacesSuccess ${state.places.length}\n');
+            markers = state.places.map((p) => Marker(
+                markerId: MarkerId(p.id),
+                position: LatLng(
+                  p.latitude, // + sin(_markerIdCounter * pi / 6.0) / 20.0,
+                  p.longitude, // + cos(_markerIdCounter * pi / 6.0) / 20.0,
+                ),
+                icon: pinLocationIcon
+              )
+            ).toList();
           }
 
           return new Scaffold(
@@ -147,15 +169,17 @@ class _CrimeMapState extends State<CrimeMap> {
               compassEnabled: true,
               myLocationEnabled: true,
               myLocationButtonEnabled: true,
-              zoomControlsEnabled: false,
+              zoomControlsEnabled: true,
+              zoomGesturesEnabled: true,
               onCameraMove: _onCameraMove,
+              markers: Set<Marker>.of(markers),
               onTap: (LatLng latLng) {
                 this._openAddCrimePlaceDialogFromMap(latLng);
               },
               
               initialCameraPosition: CameraPosition(
                 target: _center,
-                zoom: 18.0,
+                zoom: 11.0,
               ),
             ),
             floatingActionButton: Visibility(

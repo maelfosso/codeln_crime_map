@@ -15,7 +15,7 @@ class CrimeMapInitial extends CrimeMapState {}
 class CrimePlacesLoadInProgress extends CrimeMapState {}
 
 class CrimePlacesLoadSuccess extends CrimeMapState {
-  final List<String> places;
+  final List<CrimePlace> places;
 
   const CrimePlacesLoadSuccess([this.places = const []]);
 
@@ -29,6 +29,8 @@ class CrimePlacesLoadSuccess extends CrimeMapState {
 class CrimePlacesLoadFailure extends CrimeMapState {}
 
 class CrimePlaceAddInProgress extends CrimeMapState {}
+
+class CrimePlaceAddFinish extends CrimeMapState {}
 
 class CrimePlaceAdded extends CrimeMapState {
   final LatLng place;

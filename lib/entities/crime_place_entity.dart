@@ -33,6 +33,8 @@ class CrimePlaceEntity extends Equatable {
   }
 
   static CrimePlaceEntity fromSnapshot(DocumentSnapshot snap) {
+    print('\n[CRIME PLACE ENTITY] fromSnapshot - ${snap.documentID} - ${snap.data.values}');
+    
     return CrimePlaceEntity(
       snap.documentID,
       snap.data['latitude'],

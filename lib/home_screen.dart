@@ -59,13 +59,7 @@ class HomeScreen extends StatelessWidget {
           )
         ],
         child: CrimeMap() // CrimeMapApp(userRepository: userRepository),
-      ) 
-      // BlocProvider(
-      //   create: (context) => CrimeMapBloc(
-      //     userRepository: userRepository
-      //   )..add(LoadCrimePlaces()), // CrimePlacesLoaded()
-      //   child: CrimeMap(),
-      // )
+      )
     );
   }
 }

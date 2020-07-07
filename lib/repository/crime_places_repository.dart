@@ -23,7 +23,9 @@ class FirebaseCrimePlacesRepository {
 
   
   Stream<List<CrimePlace>> crimePlaces() {
+    print('[REPOSITORY - CRIMEPLACES...');
     return crimePlaceCollection.snapshots().map((snapshot) {
+      print('[CRIME PLACES - IN - SNAP] $snapshot');
       return snapshot.documents
           .map((doc) => CrimePlace.fromEntity(CrimePlaceEntity.fromSnapshot(doc)))
           .toList();
