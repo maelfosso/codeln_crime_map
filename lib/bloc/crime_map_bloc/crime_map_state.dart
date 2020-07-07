@@ -1,5 +1,7 @@
 
+import 'package:codeln_crime_map/models/models.dart';
 import 'package:equatable/equatable.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 abstract class CrimeMapState extends Equatable {
   const CrimeMapState();
@@ -13,7 +15,7 @@ class CrimeMapInitial extends CrimeMapState {}
 class CrimePlacesLoadInProgress extends CrimeMapState {}
 
 class CrimePlacesLoadSuccess extends CrimeMapState {
-  final List<CrimePlace> places;
+  final List<String> places;
 
   const CrimePlacesLoadSuccess([this.places = const []]);
 
@@ -21,7 +23,7 @@ class CrimePlacesLoadSuccess extends CrimeMapState {
   List<Object> get props => [places];
 
   @override
-  String toString() => 'CrimePlacesLoadSuccess { todos: $places }';
+  String toString() => 'CrimePlacesLoadSuccess { places: $places }';
 }
 
 class CrimePlacesLoadFailure extends CrimeMapState {}
@@ -29,7 +31,7 @@ class CrimePlacesLoadFailure extends CrimeMapState {}
 class CrimePlaceAddInProgress extends CrimeMapState {}
 
 class CrimePlaceAdded extends CrimeMapState {
-  final CrimePlace place;
+  final LatLng place;
 
   const CrimePlaceAdded(this.place);
 
@@ -39,17 +41,3 @@ class CrimePlaceAdded extends CrimeMapState {
   @override
   String toString() => 'CrimePlaceAdded { Place : $place }';
 }
-
-// class GettingPlacesSuccess extends CrimeMapState {
-//   final List<String> places;
-
-//   const GettingPlacesSuccess(this.places);
-
-//   @override
-//   List<Object> get props => [places];
-
-//   @override
-//   String toString() => 'GettingPlacesSuccess { Places : $places }';
-// }
-
-// class GettingPlacesFailure extends CrimeMapState {}
