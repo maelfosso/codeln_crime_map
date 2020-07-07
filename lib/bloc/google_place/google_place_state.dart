@@ -33,3 +33,30 @@ class LoadGooglePlacesNearbyFailure extends GooglePlaceState {
   @override
   String toString() => 'LoadGooglePlacesNearbyFailure { error: $error }';
 }
+
+class ReverseGeocodingInProgress extends GooglePlaceState {}
+
+class ReverseGeocodingSuccess extends GooglePlaceState {
+  final GooglePlace place;
+
+  const ReverseGeocodingSuccess([this.place]);
+
+  @override
+  List<Object> get props => [place];
+
+  @override
+  String toString() => 'ReverseGeocodingSuccess { places: $place }';
+}
+
+class ReverseGeocodingFailure extends GooglePlaceState {
+  final String error;
+
+  const ReverseGeocodingFailure([this.error = ""]);
+
+  @override
+  List<Object> get props => [error];
+
+  @override
+  String toString() => 'ReverseGeocodingFailure { error: $error }';
+}
+

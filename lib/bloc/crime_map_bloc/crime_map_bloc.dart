@@ -44,7 +44,7 @@ class CrimeMapBloc extends Bloc<CrimeMapEvent, CrimeMapState> {
     yield CrimePlaceAddInProgress();
   }
 
-  Stream<CrimeMapState> _mapSaveCrimePlaceToState(String place) async* {
+  Stream<CrimeMapState> _mapSaveCrimePlaceToState(LatLng place) async* {
     yield CrimePlaceAdded(place);
   }
   

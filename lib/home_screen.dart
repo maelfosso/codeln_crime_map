@@ -1,5 +1,6 @@
 import 'package:codeln_crime_map/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:codeln_crime_map/bloc/crime_map_bloc/bloc.dart';
+import 'package:codeln_crime_map/bloc/google_place/bloc.dart';
 import 'package:codeln_crime_map/crime_map_screen.dart';
 import 'package:codeln_crime_map/repository/user_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -43,12 +44,25 @@ class HomeScreen extends StatelessWidget {
           )
         ]
       ),
-      body: BlocProvider(
-        create: (context) => CrimeMapBloc(
-          userRepository: userRepository
-        )..add(LoadCrimePlaces()), // CrimePlacesLoaded()
-        child: CrimeMap(),
-      )
+      body: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => CrimeMapBloc(
+              userRepository: userRepository
+            )..add(LoadCrimePlaces()),
+          ),
+          BlocProvider(
+            create: (context) => GooglePlaceBloc()
+          )
+        ],
+        child: CrimeMap() // CrimeMapApp(userRepository: userRepository),
+      ) 
+      // BlocProvider(
+      //   create: (context) => CrimeMapBloc(
+      //     userRepository: userRepository
+      //   )..add(LoadCrimePlaces()), // CrimePlacesLoaded()
+      //   child: CrimeMap(),
+      // )
     );
   }
 }

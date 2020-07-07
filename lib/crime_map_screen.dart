@@ -6,6 +6,8 @@ import 'package:codeln_crime_map/bloc/google_place/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geocoder/geocoder.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class CrimeMap extends StatefulWidget {
@@ -20,7 +22,27 @@ class _CrimeMapState extends State<CrimeMap> {
   final LatLng _center = const LatLng(45.521563, -122.677433);
   CameraPosition _cameraPosition;
 
-  void _openAddCrimePlaceDialog() async {
+  void _openAddCrimePlaceDialogFromMap(LatLng latLng) async {
+    LatLng place = await Navigator.of(context).push(
+      new PageRouteBuilder<LatLng>(
+        opaque: false,
+        pageBuilder: (BuildContext context, _, __) {
+          return // AddCrimePlaceDialog(latLng: _cameraPosition.target);
+          BlocProvider(
+            create: (context) => GooglePlaceBloc()
+              ..add(ReverseGeocoding(latLng: latLng)),
+            child: AddCrimePlaceDialog(latLng: _cameraPosition.target)
+          ); 
+        },
+        fullscreenDialog: true
+      )
+    );
+
+    print('[openAddCrimePlaceDialogFromMAP] $place');
+    BlocProvider.of<CrimeMapBloc>(context).add(SaveCrimePlace(place: place));
+  }
+
+  void _openAddCrimePlaceDialogFromFAB() async {
     LatLng place = await Navigator.of(context).push(
       new PageRouteBuilder<LatLng>(
         opaque: false,
@@ -35,9 +57,10 @@ class _CrimeMapState extends State<CrimeMap> {
       )
     );
 
-    print('[openAddCrimePlaceDialog] $place');
+    print('[openAddCrimePlaceDialogFromFAB] $place');
     BlocProvider.of<CrimeMapBloc>(context).add(SaveCrimePlace(place: place));
   }
+
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -124,6 +147,9 @@ class _CrimeMapState extends State<CrimeMap> {
               myLocationButtonEnabled: true,
               zoomControlsEnabled: false,
               onCameraMove: _onCameraMove,
+              onTap: (LatLng latLng) {
+                this._openAddCrimePlaceDialogFromMap(latLng);
+              },
               
               initialCameraPosition: CameraPosition(
                 target: _center,
@@ -137,7 +163,7 @@ class _CrimeMapState extends State<CrimeMap> {
                   BlocProvider.of<CrimeMapBloc>(context).add(
                     CrimeMapAddButtonPressed()
                   );
-                  this._openAddCrimePlaceDialog();
+                  this._openAddCrimePlaceDialogFromFAB();
                 },
                 child: Icon(Icons.add),
                 backgroundColor: Colors.red,

@@ -1,4 +1,5 @@
 import 'package:codeln_crime_map/bloc/google_place/bloc.dart';
+import 'package:codeln_crime_map/models/google_place.dart';
 import 'package:codeln_crime_map/repository/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -8,7 +9,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class AddCrimePlaceDialog extends StatelessWidget {
   final UserRepository userRepository = UserRepository();
-  final LatLng center;
+  LatLng center;
 
   AddCrimePlaceDialog({Key key, @required LatLng latLng})
     : this.center = latLng,
@@ -22,13 +23,15 @@ class AddCrimePlaceDialog extends StatelessWidget {
         actions: [
           new FlatButton(
             onPressed: () {
-              //TODO: Handle save
+              Navigator
+                .of(context)
+                .pop(new LatLng(center.latitude, center.longitude));
             },
             child: new Text('SAVE',
               style: Theme
                 .of(context)
-                .textTheme.subtitle1
-                // .subhead
+                .textTheme
+                .subtitle1
                 .copyWith(color: Colors.white)
               )
           ),
@@ -38,6 +41,26 @@ class AddCrimePlaceDialog extends StatelessWidget {
       body: BlocBuilder<GooglePlaceBloc, GooglePlaceState>(
         builder: (context, state) {
           Widget widget = Container();
+
+          if (state is ReverseGeocodingInProgress) {
+            widget = CircularProgressIndicator(strokeWidth: 10);
+          }
+
+          if (state is ReverseGeocodingSuccess) {
+            GooglePlace place = state.place;
+            this.center = LatLng(place.latitude, place.longitude);
+
+            List<String> parts = place.name.split("___");
+
+            widget = ListTile(
+              title: Text(parts[0]),
+              subtitle: Text(parts[1]),
+            );
+          }
+
+          if (state is ReverseGeocodingFailure) {
+            widget = Text(state.error);
+          }
 
           if (state is LoadGooglePlacesNearbySuccess) {
             widget = ListView.separated(
@@ -54,12 +77,8 @@ class AddCrimePlaceDialog extends StatelessWidget {
             ); 
           }
           if (state is LoadGooglePlacesNearbyFailure) {
-            widget = Container(
-              padding: EdgeInsets.all(8.0),
-              child: Text(state.error)
-            );
+            widget = Text(state.error);
           }
-
           
           return Center(
             child: Container(
@@ -72,7 +91,10 @@ class AddCrimePlaceDialog extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    widget,
+                    Container(
+                      padding: EdgeInsets.all(8.0),
+                      child: widget
+                    ),
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

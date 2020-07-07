@@ -1,6 +1,7 @@
 
 import 'package:codeln_crime_map/models/models.dart';
 import 'package:equatable/equatable.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 abstract class CrimeMapState extends Equatable {
   const CrimeMapState();
@@ -30,7 +31,7 @@ class CrimePlacesLoadFailure extends CrimeMapState {}
 class CrimePlaceAddInProgress extends CrimeMapState {}
 
 class CrimePlaceAdded extends CrimeMapState {
-  final String place;
+  final LatLng place;
 
   const CrimePlaceAdded(this.place);
 
