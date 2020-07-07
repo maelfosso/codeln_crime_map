@@ -85,7 +85,7 @@ class _CrimeMapState extends State<CrimeMap> {
   }
 
   void _setCustomMapPin() async {
-    Uint8List icon = await getBytesFromAsset('assets/location-pin.png', 135);
+    Uint8List icon = await getBytesFromAsset('assets/location-pin-5.png', 135);
     pinLocationIcon = BitmapDescriptor.fromBytes(icon);
   }
 
