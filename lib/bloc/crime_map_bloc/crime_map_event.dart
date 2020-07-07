@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meta/meta.dart';
 
 abstract class CrimeMapEvent extends Equatable {
@@ -10,9 +11,8 @@ abstract class CrimeMapEvent extends Equatable {
 
 class LoadCrimePlaces extends CrimeMapEvent {}
 
-
 class SaveCrimePlace extends CrimeMapEvent {
-  final String place;
+  final LatLng place;
 
   const SaveCrimePlace({
     @required this.place

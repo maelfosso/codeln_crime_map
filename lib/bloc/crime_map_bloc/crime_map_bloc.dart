@@ -3,6 +3,9 @@ import 'dart:math';
 import 'package:bloc/bloc.dart';
 import 'package:codeln_crime_map/bloc/crime_map_bloc/crime_map_event.dart';
 import 'package:codeln_crime_map/bloc/crime_map_bloc/crime_map_state.dart';
+import 'package:codeln_crime_map/models/models.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_webservice/places.dart';
 import 'package:meta/meta.dart';
 import 'package:codeln_crime_map/repository/user_repository.dart';
 
@@ -29,12 +32,6 @@ class CrimeMapBloc extends Bloc<CrimeMapEvent, CrimeMapState> {
   }
 
   Stream<CrimeMapState> _mapGettingCrimePlacesToState() async* {
-    // try {
-    //   await _userRepository.signInWithGoogle();
-    //   yield CrimeMapState.success();
-    // } catch(_) {
-    //   yield CrimeMapState.failure();
-    // }
     var rand = new Random();
     if (rand.nextInt(100) % 2 == 0) {
       yield CrimePlacesLoadSuccess([]);
@@ -44,22 +41,10 @@ class CrimeMapBloc extends Bloc<CrimeMapEvent, CrimeMapState> {
   }
 
   Stream<CrimeMapState> _mapCrimeMapAddButtonPressedToState() async* {
-    // try {
-    //   await _userRepository.signInWithGoogle();
-    //   yield CrimeMapState.success();
-    // } catch(_) {
-    //   yield CrimeMapState.failure();
-    // }
     yield CrimePlaceAddInProgress();
   }
 
-  Stream<CrimeMapState> _mapSaveCrimePlaceToState(String place) async* {
-    // try {
-    //   await _userRepository.signInWithGoogle();
-    //   yield CrimeMapState.success();
-    // } catch(_) {
-    //   yield CrimeMapState.failure();
-    // }
+  Stream<CrimeMapState> _mapSaveCrimePlaceToState(LatLng place) async* {
     yield CrimePlaceAdded(place);
   }
   
