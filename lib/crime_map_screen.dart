@@ -39,7 +39,9 @@ class _CrimeMapState extends State<CrimeMap> {
     );
 
     print('[openAddCrimePlaceDialogFromMAP] $place');
-    BlocProvider.of<CrimeMapBloc>(context).add(SaveCrimePlace(place: place));
+    if (place != null) {
+      BlocProvider.of<CrimeMapBloc>(context).add(SaveCrimePlace(place: place));
+    }    
   }
 
   void _openAddCrimePlaceDialogFromFAB() async {
@@ -153,7 +155,7 @@ class _CrimeMapState extends State<CrimeMap> {
               
               initialCameraPosition: CameraPosition(
                 target: _center,
-                zoom: 11.0,
+                zoom: 18.0,
               ),
             ),
             floatingActionButton: Visibility(

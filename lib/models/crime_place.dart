@@ -44,16 +44,15 @@ class CrimePlace {
     return 'CrimePlace{id: $id, name: $name, latitude: $latitude, longitude: $longitude, reportNumber: $reportNumber}';
   }
 
-  // CrimePlaceEntity toEntity() {
-  //   return CrimePlaceEntity(task, id, note, complete);
-  // }
+  CrimePlaceEntity toEntity() {
+    return CrimePlaceEntity(id, latitude, longitude);
+  }
 
-  // static CrimePlace fromEntity(CrimePlaceEntity entity) {
-  //   return CrimePlace(
-  //     entity.task,
-  //     complete: entity.complete ?? false,
-  //     note: entity.note,
-  //     id: entity.id,
-  //   );
-  // }
+  static CrimePlace fromEntity(CrimePlaceEntity entity) {
+    return CrimePlace(
+      entity.latitude,
+      entity.longitude,
+      id: entity.id
+    );
+  }
 }
